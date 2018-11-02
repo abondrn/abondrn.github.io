@@ -1,0 +1,293 @@
+<!DOCTYPE html>
+<html lang="en">
+<title>CS186</title>
+<link rel="shortcut icon" href="ab.png" >
+<script async src="https://www.googletagmanager.com/gtag/js?id=UA-128390657-1"></script>
+<script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
+<script>
+window.dataLayer = window.dataLayer || [];
+function gtag(){dataLayer.push(arguments);}
+gtag('js', new Date());
+
+gtag('config', 'UA-128390657-1', {
+  'page_path': location.pathname,
+  'link_attribution': true,
+});
+
+gtag('event', 'page_view', { 'send_to': 'UA-128390657-1'});
+
+(adsbygoogle = window.adsbygoogle || []).push({
+google_ad_client: "ca-pub-6187072965455073",
+enable_page_level_ads: true
+});
+
+window.addEventListener('load', function()
+{
+	if(window.ga && ga.create) console.log('Google Analytics is loaded');
+	else console.log('Google Analytics is not loaded');    
+
+	if(window.google_tag_manager) console.log('Google Tag Manager is loaded');
+	else console.log('Google Tag Manager is not loaded');
+}, false);
+
+window.texme = { style: 'plain' }
+</script>
+<script src="https://cdn.jsdelivr.net/npm/texme@0.5.0"></script>
+<style>
+a {
+  text-decoration: inherit;
+}
+</style>
+<img src="https://ga-beacon.appspot.com/UA-128390657-2/gh-pages/cs186?pixel" />
+<textarea>
+
+# CS 186: Database Systems
+
+$$
+\newcommand{\abs}[1]{\lvert #1 \rvert}
+\newcommand{\t}[1]{\text{#1}}
+\newcommand{\npages}[1]{\text{NPages}(#1)}
+\newcommand{\ntuples}[1]{\abs{#1}}
+\newcommand{\nblocks}[1]{[#1]}
+$$
+
+## SQL
+
+```sql
+create table NAME (
+FIXSTR varchar (maxlen) not null,
+NUM numeric (totaldigits, decimalplaces),
+primary key (...),
+foreign key (...) references TABLE,
+);
+```
+
+SQL Queries
+ - `<column list>` : list of `<column>`, `<aggregator>(<column>)`, `COUNT(<query column list>)`
+ - `<query column list> ::= [DISTINCT] <column list>`
+
+```sql
+SELECT <query column list>
+FROM <table list>
+[[INNER | [LEFT | RIGHT | FULL] OUTER] JOIN <table> ON <predicate>][WHERE ]
+[GROUP BY <column list>][HAVING ]
+[ORDER BY <column list with optional DESC/ASC's>][LIMIT ];
+```
+Aggregate functions include: sum, avg, count, min, max 
+ - `GROUP BY` takes several rows and compresses them into one row 
+ - `HAVING` is similar to where clause but is used in conjunction with a GROUP BY (it eliminates groups)
+ - `WHERE` eliminates rows
+
+Order of operations:
+- `FROM `
+- `ON`
+- `OUTER`
+- `WHERE`
+- `GROUP BY`
+- `HAVING`
+- `SELECT`
+- `DISTINCT`
+- `ORDER BY`
+
+nested and correlated (includes outer table) queries
+- `IN`
+- `EXISTS`
+- `ALL`/`ANY`
+- `NOT`; 3-value logic
+- `UNION`/`INTERSECT`
+- `IS [NOT] NULL`
+- LIKE (% is .*), ~ (regex)
+
+`Count(*)` actually counts all rows and `Count(column_name)` counts only the non-null elements.
+This is a key distinction that you might want to pay attention to, though you could always add in a filter in the `WHERE` clause excluding nulls if you need it, and that helps with `count(*)`. 
+
+## File Organization
+
+bitmap (beginning of the page)
+
+slot directory (end of the page)
+
+at most how many records can fit = (page - footer)/(pointer+record)
+
+## Performance Cost Model
+
+ - $B$ - data blocks/page
+ - $R$ - records/block
+ - $D$ - avg time to r/w disk block
+ - uniform random workloads
+ - unit: IOs
+
+clusted index with 2/3 full heap file pages, static index
+ - scan all records, $B$, $B$, $3/2 B$
+ - equality search (unique), $B/2$, $\log_2 B$,  $log_F 3/2 B + 1$
+ - range search, $B$, $\log(B)+$pages, $\log_F(3/2 B) + $pages
+ - insert, 2, ($\log(B) + B$), $(\log_F 3/2 B) + 2$
+ - delete (unique), $(B/2+1)$, $(\log(B)+B)$, $(\log_f 3/2 B) + 2$
+
+## Indices
+
+## Buffers, Sorting/Hashing
+
+ - IO cost = passes * $2N$ (<- read+write)
+ - runs = $N/B$
+ - buffer pages = $B$
+ - input pages = $N$
+ - passes = $1 \t{(sort)} + \t{ceil}(\log_{B-1} \t{runs}) \t{(merge)}$
+
+## Joins
+
+ - $\ntuples{R}$ - tuples in $R$
+ - $\nblocks{R}$ - blocks in $R$
+ - outer - $R$, inner - $S$
+
+SNLJ
+```pseudocode
+for tuple r in R:
+	for tuple s in S:
+		if join_predicate(R, S):
+			output(r, s)
+```
+Cost: $\ntuples{R} * \nblocks{S} + \nblocks{R}$
+
+PNLJ (BNLJ with B=3)
+```pseudocode
+for page pr in R:
+	for page ps in S:
+		for tuple r in pr:
+			for tuple s in ps:
+				if join_predicate(R, S):
+					output(r, s)
+```
+Cost: $\nblocks{R} * \nblocks{S} + \nblocks{R}$
+
+BNLJ
+```pseudocode
+for block br in R:
+	for page ps in S:
+		for tuple r in br:
+			for tuple s in ps:
+				if join_predicate(R, S):
+					output(r, s)
+```
+Cost: $\t{ceil}(\nblocks{R}/(B-2)) * \nblocks{S} + \nblocks{R}$
+
+Which should be the larger table? inner, outer for BNLJ
+
+INLJ
+```pseudocode
+for tuple r in R:
+	matches = lookup(key(r))
+	for tuple sj in matches:
+		output(r, sj)
+```
+Cost: $\ntuples{R} * (\t{lookup cost}) + \nblocks{R}$
+
+lookup cost = cost to traverse tree to leaf +
+ - Alt 1: 0
+ - Alt 2/3 clustered: 1 per matched page of $S$
+ - Alt 2/3 unclustered: 1 per matched tuple of $S$
+
+Sort-merge Join
+ - Pass 0, …, $K-1$: externally sort $R$ and $S$
+ - Pass $K$: merge $R$ and $S$
+ - Average Case Cost = $Sort(R) + Sort(S) + \nblocks{R} + \nblocks{R}$ (cost to sort indexed is 0)
+ - Need enough buffers to hold all runs of $R$ and $S$ in memory at the same time
+
+Sort-merge Join Refinement
+ - Pass 0, …, $K-2$: externally sort $R$ and $S$ until almost sorted
+ - Pass $K-1$: merge $R$ and $S$
+
+Grace hash join
+ - $B$ Buffer Pages
+ - create $B-1$ partitions
+ - stop when either one of the 2 tables can be partitioned into $B-2$ page buffers
+ - Any hash function used in the partitioning passes may NOT be used in the probing pass, since every value in a partition would have the same value for that hash function.
+ - Cost: $(2P+1)(\nblocks{R} + \nblocks{S})$
+
+Hybrid hashing becomes grace hash join when we don't have much memory, so cannot perform worse when we have very few buffer pages.
+
+## Parallel Query Processing
+
+Speedup - increased throughput, fixed workload (throughput(data size) $\in$ O(data size))
+
+Scaleup - increased workload, fixed throughput (throughput(data size) $\in O(1)$)
+
+Data Partitioning - Range (equijoins, range queries, group-by), Hash (equijoins, group-by), Round Robin (spreading load)
+
+the disk and network I/O cost of one machine for performing a join?
+
+Parallelizing Joins
+
+P grace hash/sort merge join - only difference in cost is cost required to stream records to different machines (network cost is zero if no need to repartition)
+
+Broadcast join
+
+relation $R$ is very small - $\npages{R} * M$
+
+Repartitioning cost/size of the records that has to be partitioned across machine phase for parallelized sort merge join: $(M-S)/M * [R]$
+
+Key skew - If most of the data is of the same key, then range/hash partitioning will not improve performance!
+
+## Query Optimization
+
+Selectivity Estimation
+- selectivity (reduction factor) estimation = |output| / |input|
+- if indexed, we can assume we know number of distinct values and range
+- $S(c = v) = 1/\abs{c}$
+- $S(c_1 = c_2) = 1/\max(\abs{c_1}, \abs{c_2})$, NKeys(c)
+- $S(c > v) = (\abs{(v,\max(c)]})/(\abs{[\min(c),\max(c))})$,
+  - $\abs{(a,b]} = \abs{[a,b)} = b - a$
+  - $\abs{[a,b]} = b - a + 1$ if int, $b - a$ if float
+- $S(c < v) = (\abs{[\min(c),v)})/(\abs{[\min(c),\max(c)]})$,
+- $S(p_1 \t{AND } p_2) = S(p_1)S(p_2)$
+- $S(p_1 \t{OR } p_2) = S(p_1) + S(p_2) - S(p_1)S(p_2)$
+- $S(\t{NOT } p) = 1 - S(p)$
+- default, 1/10
+- result size = $S(p) \npages{R}$
+
+System R (Selinger) Optimizer
+ - Single table access plans (Pass 1)
+   - predicates on only one table will be handled in pass 1 of QO
+   - Optimal access plan - full table scan, index scan if there is predicate etc. 
+   - Interesting orders access plans (`GROUP BY`, `ORDER BY`, `JOIN`)
+   - Calculate the output size for next pass
+ - Multi table joins (Pass 2)
+   - Optimal join types between tables of previous pass with an additional table
+   - Cost calculation is the same as joins in previous section!
+
+Single-Table Plan Cost Estimates
+- Sequential scan - $\npages{R}$
+- Equality select on indexed key - height of index + 1
+- Select on clustered index T - $(\npages{T} + \npages{R}) * \prod RFs$ <- selectivity of remaining subqueries
+- Select on unclustered index T - $(\npages{T} + \ntuples{R}) * \prod RFs$
+- exact - [# pages to leaf] + selectivity*[pages in relation]
+
+- Plan Space
+  - only left deep join trees
+  - avoid cartesian products
+  - push selections and joins
+  - interesting orders
+    - A relation is said to have an interesting order if it is in an `ORDER BY`, `GROUP BY`, downstream `JOIN`
+
+## Serializability, Transactions, & Concurrency Control
+
+- Atomicity: All actions in transaction happen, or none
+- Consistency: Transaction maintains database consistency
+- Isolation: runs as if it is the only transaction
+- Durability: Committed transactions persist
+
+Two actions conflict if they are made by 
+ - different transactions
+ - on the same object
+ - at least one of the actions is a write
+
+ - Operation: logical unit
+ - Transaction: sequence of operations
+ - Schedule: some order in which we execute operations of a bunch of transactions
+ - Serial schedule: each transaction runs start to finish without interleaving
+ - For a pair of conflicting actions where T1 acts before T2, there is an edge in the dependency graph from T1 to T2
+ - The schedule is conflict serializable if the dependency graph is acyclic
+ - The conflict equivalent serial schedules can be found by topologically sorting the dependency graph
+ - serial $\subset$ conflict serializable $\subset$ view serializable $\subset$ serializable $\subset$ schedules
+
+</textarea>

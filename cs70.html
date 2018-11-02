@@ -1,0 +1,545 @@
+<!DOCTYPE html>
+<html lang="en">
+<title>CS70</title>
+<link rel="shortcut icon" href="ab.png" >
+<script async src="https://www.googletagmanager.com/gtag/js?id=UA-128390657-1"></script>
+<script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
+<script>
+window.dataLayer = window.dataLayer || [];
+function gtag(){dataLayer.push(arguments);}
+gtag('js', new Date());
+
+gtag('config', 'UA-128390657-1', {
+  'page_path': location.pathname,
+  'link_attribution': true,
+});
+
+gtag('event', 'page_view', { 'send_to': 'UA-128390657-1'});
+
+(adsbygoogle = window.adsbygoogle || []).push({
+google_ad_client: "ca-pub-6187072965455073",
+enable_page_level_ads: true
+});
+
+window.addEventListener('load', function()
+{
+	if(window.ga && ga.create) console.log('Google Analytics is loaded');
+	else console.log('Google Analytics is not loaded');    
+
+	if(window.google_tag_manager) console.log('Google Tag Manager is loaded');
+	else console.log('Google Tag Manager is not loaded');
+}, false);
+
+window.texme = { style: 'plain' }
+</script>
+<script src="https://cdn.jsdelivr.net/npm/texme@0.5.0"></script>
+<style>
+a {
+  text-decoration: inherit;
+}
+</style>
+<img src="https://ga-beacon.appspot.com/UA-128390657-2/gh-pages/cs70?pixel" />
+<textarea>
+
+$$
+\newcommand{\t}[1]{\text{#1}}
+\newcommand{\op}[1]{\operatorname{#1}}
+\newcommand{\inv}[1]{#1^{-1}}
+
+\newcommand{\abs}[1]{\lvert #1 \rvert}
+\newcommand{\norm}[1]{\lVert #1 \rVert}
+\newcommand{\grp}[1]{( #1 )}
+\newcommand{\brc}[1]{\lbrace #1 \rbrace}
+\newcommand{\brk}[1]{[ #1 ]}
+\newcommand{\ang}[1]{\langle #1 \rangle}
+\newcommand{\floor}[1]{\lfloor #1 \rfloor}
+
+\newcommand{\P}[1]{\op{P}\grp{#1}}
+\newcommand{\EV}[1]{\mathbb{E}\brk{#1}}
+\newcommand{\Var}[1]{\op{Var}\brk{#1}}
+\newcommand{\Cov}[2]{\op{Cov}\brk{#1, #2}}
+
+\newcommand{\Norm}{\op{Normal}}
+\newcommand{\Binom}{\op{Binomial}}
+\newcommand{\Geom}{\op{Geometric}}
+\newcommand{\U}{\op{Uniform}}
+\newcommand{\Pois}{\op{Poisson}}
+\newcommand{\Exp}{\op{Exponential}}
+
+\newcommand{\st}{\mid}
+\newcommand{\divides}{\mid}
+\newcommand{\coprime}{\perp}
+\newcommand{\Ints}{\mathbb{Z}}
+$$
+
+# CS 70: Discrete Math & Probability
+
+## Logic \& Proof Techniques
+
+ - counterexample
+ - De Morgan's law
+ - $P \implies Q \equiv \lnot (P \land \lnot Q)$, false implies anything (vacuous truth) and anything implies truth
+ - contrapositive, contradiction, excluded middle
+ - $\exists x \st P(x) \land Q(x) \implies (\exists x \st P(x)) \land (\exists x \st Q(x))$
+ - $\forall x,\ P(x) \lor Q(x) \Leftarrow (\forall x,\ P(x)) \lor (\forall x,\ Q(x))$
+ - **Well Ordering Principle** for a nonempty subset of natural numbers, there is a least element
+ - **Pigeonhole Principle** $f : X \to Y \land \abs{X} > \abs{Y} \implies \exists x_1, x_2 \in X \st f(x_1) = f(x_2)$ (i.e., not 1-1, some cases applies for 2 elements)
+ - proof by cases + remainder
+ - averages: $(\exists x,\ x \ge \bar{x}) \land (\exists x,\ x \le \bar{x})$
+ - strong induction: multiple base cases, $\forall 0 \le k \le n,\ (P(0) \land \dots \land P(k)) \implies P(k + 1)$ 
+ - prove for integers greater than $k$
+
+## Stable Marriage
+
+**definitions**
+ - an **instance** of the stable marriage problem is a set of preference lists
+ - a **matching** or **pairing** uniquely assigns each man to a woman, and vice versa
+ - a **rogue couple** is a pair $(m,w)$ such that $m$ and $w$ prefer each other to their current partner in the matching
+   - **rogue pair** 2 couples that would be better off by swapping partners
+ - a matching is **stable** if there are no rogue couples
+ - we say $w$ is $m$'s **optimal partner** if $m$ prefers $w$ over his partners in all other *stable matchings* (recieve highest preference)
+ - a stable pairing is **male-optimal** if every man is paired with his optimal partner
+ - the **Traditional Marriage Algorithm (TMA)** is where the men propose to the women
+
+**results** (algorithm properties)
+ - termination
+   -  in finite time
+      - Proof. Every day, either a man gets rejected, or the algorithm terminates. Each rejection crosses off a woman on some man’s finite preference list.
+   - with **completeness**: (each man is matched with a woman)
+      - Improvement Lemma: If there is some man who is not matched at the end, he was rejected by $n$ women.
+      - Proof. By the Improvement Lemma, each of those $n$ women has someone better on their strings. But now we count $n+1$ men, leading to contradiction.
+   - with a stable pairing
+     - Proof. If $(m,w)$ is a rogue couple, then $m$ must have proposed to $w$ first (he likes her better than his current partner). But he's not together with $w$ right now, which means she rejected him! So $w$ would actually not rather be with $m$ after all. Not a rogue couple.
+ - **woman improvement lemma**: after the first day a man proposes to a woman, the woman is proposed to be someone she prefers at least as much as the man
+   - Proof: By induction. On day $n$, either a woman has no one, or she has a man. If she has no one, then a proposal is better than no proposal. If she has a man on a string, he will return to propose to her on the next day.
+ - male-optimiality
+   - Proof. Well-Ordering Principle. Let $m$ be the first man who got rejected by his optimal partner. The woman he asked out must like some other man better, and she is high on his preference list as well, since $m$ was supposed to be the first one rejected by his optimal partner. Thus if $m$ was rejected by by his optimal partner, then his optimal partner and the partner assigned to her by the algorithm would be a rogue couple.
+   - male-optimality $\implies$ female-pessimality
+ - $R$ and $R'$ are stable pairings. Suppose $(m,w)$ are a couple in $R$, but not in $R'$. Prove that if $m$ prefers $R$, then $w$ prefers $R'$, and vice versa.
+   - Suppose that both $m$ and $w$ prefer $R$ over $R'$. This means that both $m$ and $w$ prefer each other over their partners in $R'$, which is the definition of a rogue couple. This contradicts the stability of $R'$.
+
+**strategy**: In general, consider proofs by induction or contradiction with SMA proofs. In most SMA proofs by contradiction, use the well-ordering principle
+("The first day that$\dots$") and construct a rogue couple. A common counter-example is the 2x2 case, where there are two men and two women, where all preference lists are different.
+
+## Graph Theory
+
+ - degree - number of incident edges, outgoing and incoming for directed
+ - $\sum_v \op{degree}(v) = 2\abs{E}$
+   - each edge contributes to the in-degree of one, and the out-degree of another
+ - Induction on graphs: avoid build-up error by starting with a graph of $n + 1$ vertices (or $n + 1$ edges), removing one and applying the inductive hypothesis, then deriving the predicate for the original graph.
+ - **connected**: existance of a path between any 2 vertices
+   - **connected components**: maximally connected subgraph
+   - a vertex with degree $d$ is part of a connected component of size at least $d+1$
+ - average degree $\frac{2\abs{E}}{\abs{V}}$
+
+tree
+ - (minimally) connected acyclic graph, where edge removals disconnect the graph into connected components of size at most $\abs{V}-1$, there is a unique path between any 2 vertices, and additional edges would creates a cycle
+ - $\abs{E} = \abs{V} - 1, f = 1$
+
+**complete**: $K_n$
+ - most edges for a given number of vertices; edge limit on any given subgraph
+ - $\abs{E} = \frac{n(n-1)}{2} = \binom{n}{2}, \op{degree}(v) = n-1$
+
+**complete bipartite**: $K_{n_1, n_2}$
+ - $\abs{V} = n_1 + n_2, \abs{E} = n_1 n_2, \op{degree}(v_1) = n_2, \op{degree}(v_2) = n_1$,
+ - all cycles are of even length
+
+**planar**: no edge crossings when drawn in plane, or doesn't contain $K_5$ or $K_{3,3}$ minors
+ - **faces**: edge-contained regions (incl. surrounding)
+ - **Euler's formula**: $\abs{V}+f-\abs{E} = 2$
+
+upper bounds based on face-edge adjacencies
+ - for $\abs{E} \ge 3$, minimum cycle is triangular is triangular so $\frac{f}{2} \le \frac{\abs{E}}{3} \implies \abs{E} \le 3\abs{V} - 6$
+ - $\frac{f}{2} \le \frac{\abs{E}}{2} \implies \abs{E} \le 2\abs{V} - 4$ for bipartite
+
+**$n$-hypercube**
+ - vertices can be notated as $n$-bit bitstrings $\brc{0,1}^n$ where adjacent vertices differ by 1 bit
+ - recursive definition: $(n+1)$-dimensional hypercube defined by connecting corresponding vertices from 2 $n$-dimensional hypercubes
+ - $\abs{V} = 2^n, \abs{E} = n2^{n-1}, \op{degree}(v) = n$
+
+ - **tournament**: complete directed graph, where a Hamiltonian path represents a succession of winners
+ - **path**: sequence of edges, where adjacent edges are connected by being incident to the same vertex
+   - **simple path**: distinct vertices, each edge is connected to at most 2 other edges, $f = 1$ if acyclic
+   - **cycle**: starts and ends on same vertex, $f = 2$
+   - **Hamiltonian/Rudrata**: visits each vertex exactly once
+ - **walk**
+   - **tour**: analogous to *cycle*, contributes even degree to each visited vertex
+   - **Eulerian**: contains every edge exactly once
+   - **Euler's theorem**: exists iff connected and of even degree (all vertices have even degree)
+   - Must enter and leave, which uses 2 incident edges per vertex.
+   - **Eulerian**: analogous to *Eulerian tour*, requires all even excluding 2 isolated vertices
+
+ - $n$-vertex/edge a coloring assigns a color to edge vertex/edge where adjacent vertices/edges have different colors
+   - proof by removing, inductively coloring rest of graph, then using available color(s)
+
+## Number Theory
+
+ - $d \divides m \equiv \exists k \in \Ints,\ m = kd$
+ - $x \equiv y \pmod n \equiv n \divides (x - y)$, $\Ints_n$ are equivalence classes
+ - $x \op{mod} m \equiv x - \floor{\frac{x}{m}} m$
+ - multiplicative inverse $\inv{a} \pmod n$ for $a \coprime n$ satisfies $\inv{a}a \equiv 1 \pmod n$
+ - can be used to solve $ax \equiv b \pmod n$
+```
+# Euclid's algorithm to compute the g.c.d. of x and y, given x >= y
+proc gcd(x, y)
+    if y = 0
+        return x
+    else
+        return gcd(y, x mod y)
+    end
+end
+
+# Extended Euclidean algorithm to find (d, a, b), where d = gcd(x, y) = ax + by
+proc egcd(x, y)
+    if y = 0
+        return (x, 1, 0)
+    else
+        (d, a, b) <- egcd(y, x mod y)
+        return (d, b, a - floor(x / y) * b)
+    end
+end
+```
+ - $\gcd(x,y) = \gcd(x,x-ny), n \ne 0$
+ - Fermat's little theorem $\forall a \in \Ints,\ a \ne 0 \implies a^{p-1} \equiv 1 \pmod n$ for prime $p$
+ - Fermat's Little Theorem: for $\Pi_i p_i \not\divides a$, $a^x \equiv a^{x \op{mod} \Pi_i (p_i - 1)} \pmod{\Pi_i p_i}$
+ - $f(x) = ax \pmod m$ for $\gcd(a,m) = 1$ and $f(x) = x+b \pmod m$ are bijections $\Ints_m \to \Ints_m$
+ - $(p-1)! \equiv -1 \pmod{p}$
+ - Wilson's theorem; $x^{p-1} - 1 \equiv (x-1)...(x-(p-1)) \equiv 0, 0^{p-1} - 1 \equiv (-1)^{p-1}(p-1)!$
+
+### RSA Scheme
+
+$N = pq$. Choose $e \coprime (p-1)(q-1)$, so that $d = \inv{e} \op{mod}~(p-1)(q-1)$ is defined.
+
+Keys: $(N, e)$ is public, $d$ is private. $E(M) = M^e \op{mod} N$, $D(C) = C^d \op{mod} N$.
+ - sender knows public, reciever knows both
+
+### Polynomial Schemes
+
+properties: a polynomial with degree $d$ has at most $d$ roots, $d+1$ distinct points determine a unique degree-$d$ polynomial
+
+Interpolation Encoding
+ - any polynomial is at most degree $p-1$ in $GF(p)$
+   - we cannot specify a polynomial of degree $\ge p$, since $p = 0$ over $GF(p)$, so $P(p) = P(0)$ for any polynomial $P$
+ - interpolation-encoding has Hamming distance 2k+1
+
+Error Correcing Codes, Erasure
+ - $k$ extra points needed for maximum $k$ drops, $2k$ extra points needed for maximum $k$ general errors
+
+Berlekamp Welch (Coefficient Encoding)
+ - $E(x) = \Pi_i (x - c_i)$, where $c_i$ is a corrupted packet; degree $k$, $k$ unknown coefficients (leading 1)
+ - $Q(x_i) = P(x_i)E(x_i) = r_i E(x_i)$ for $x_i \in 1..(n+2k)$; degree $(n-1) + k$, $n+k$ unknown coefficients, evaluating at all $x_i$ gives a determined system
+
+Reed-Solomon
+
+## Countability
+
+- products of countable sets are countable (Cantor pairing), and finite is finite
+- infinite products of infinitely countable sets are uncountable by diagonalization: if there exists a listing, create a new element as a sequence that is itemwise different from the diagonal
+- a countable union of countable sets is countable, using interleaving
+- the set of all finite strings (including substrings of possibly infinite strings) are countable
+- the power set of a countable set is not countable
+
+## Computability
+
+ - self-reference
+ - undecidable
+ - reduction
+ - run one instruction/step, test something under some constraint on the execution time or number of instructions
+ - Suppose we had a program $TEST(P, x)$ which returns true if $P(x)$ \_ at any time during its execution
+   - construct a new program $P'$ that has the same code as $P$, removing all instances of \_ so that there is no \_ in the entire program, and add \_ before every return or exit statement (exit point)
+   - if $P(x)$ halts, then by our construction of $P'$, $P'(x)$ will \_, and therefore $TEST(P', x)$ will return true
+   - if $P(x)$ never halts, then $P(x)$ will never \_ because we removed all \_, and therefore $TEST(P', x)$ will return false
+   - the Halting Problem reduces to this/this is a reduction from the Halting Problem/$HALT \to TEST$, meaning $TEST$ cannot exists
+
+## Combinatorics
+
+<!--
+decision, step, choices/options, ways; k-1 equivalencies
+drawing samples
+unique
+split, slots
+stars, bars (divisions)
+occurances, appear
+multiplication rule
+-->
+
+ - permutation $k!$ -- ways to order, rearrangement $k$ elements
+ - $\binom{n}{k} = \frac{n!}{k!(n-k)!}$
+ - pick, choose samples
+
+$$\begin{array}
+\t{ordered?} & \t{with replacement? repetition allowed?} & \t{formula} \\
++ & + & n^k              \\
++ & - & k!\binom{n}{k}   \\
+- & + & \binom{n+k-1}{k} \\
+- & - & \binom{n}{k}     \\
+\end{array}$$
+
+- ways to put $n$ indistinguishable balls into $k$ distinguishable "bins", each containing at least $l$: $\binom{n-kl+d}{d}$, where $d=k-1$
+
+## Probability
+
+General Formulas, Identities
+ - Index reversal: $\sum_{i = k..n} f(i) = \sum_{i = k..n} f(n - i + k)$
+ - Geometric sum: $\sum_{i \in 0..k} r^i = \frac{1-r^{k+1}}{1-r}$
+ - Harmonic sum approximation: $\sum_{i \in 1..n} i^-1 \approx \ln n  + \gamma + O(n^{-1})$
+ - $e^\epsilon \ge 1+\epsilon$ for $\abs{\epsilon} < 1, \ln(1+\epsilon) \le \epsilon$ for $\abs{\epsilon} < 1$ from power series expansion
+ - indicator, Iverson bracket
+ - $\lim_{n \to \infty} (1 + \frac{x}{n})^n = \sum_{k \in \Ints} \frac{x^k}{k!} = e^x$
+
+study of random processes & quantified uncertainty
+
+ - sample space - set of all possible outcomes (called point values) of an experiment
+ - event - subset of favorable/relevant outcomes in the sample space
+ - probability of an event - likelihood of occurance as fraction of sample space
+   - $\P{E} = \frac{\abs{E}}{\abs{S}}$
+ - $0 \le \P{E} \le 1$ (bounded), $\varnothing \subseteq E \subseteq S$ so $0 \le \abs{E} \le \abs{S}$
+ - $\P{\t{not }A} = \P{S \\ A} = 1 - \P{A}$
+ - joint probability
+ - $\P{A\t{ or }B} = \P{A} + \P{B} - \P{A\t{ and }B}$: inclusion—exclusion principle; Venn diagram, overlap
+ - if $A, B$ disjoint (cannot occur together; no overlap), $\P{A\t{ and }B} = 0$
+ - if $A, B$ independent (information about 1 event does not influence outcome of other), $\P{A | B} = \P{A}$, $\P{A\t{ and }B} = \P{A}\P{B}$ (counting principle)
+   - For any event $A$, the events $A$ and $\Omega$ are independent.
+   - pairwise independence $\not\implies$ mutual independence
+   - independent events with positive probability cannot be disjoint
+ - conditional probability -- considering only B’s subset (the given) of S, $\P{A | B} = \frac{\P{A\t{ and }B}}{\P{B}}$
+Law of total probability: let $C$ be a partition (set of m.e. and c.e. events); then $\P{A} = \sum_i \P{C_i} \P{A | C_i}$ 
+
+Bayes' rule: $\P{A | B} = \frac{\P{B | A}}{\P{B}} \P{A}$
+ - Bayesian inference is a way to update knowledge after making an observation.
+ - $\P{A}$ is the prior probability: our assessment/estimate of the likelihood of an event of interest $A$ before making an observation.
+ - $\P{A | B}$ is the posterior probability of $A$ after event $B$ occurs, reflecting our new knowledge.
+
+symmetry/indifference/insufficient reason principle - in the absence of additional information about the outcome of previous equiprobable events, the probability of another is also equiprobable; two random variables are exchangeable, that is, they can be swapped without changing the scenario, then they have the same distribution
+
+permutation fixed points, same after shuffling, $\P{\text{k returned}} = \frac{1}{P(n,k)}$
+
+### Working with distributions
+
+ - random variable (r.v.) - a real function whose value depends on the outcome of a probabilistic event is called a random variable
+   - defined by range (set of possible values it can take on) and distribution over that range (assignment of probability to values), which naturally forms a partition
+
+ - the **distribution** of a random variable is its range and associated probability
+
+ - **probability mass function** $\op{pmf}_X(x) = \P{X = x}$
+ - **cumulative mass function** $\op{cdf}_X(x) = \P{X \le x}$
+
+ - marginalization of joint distributions -- $\P{X = x} = \Sigma_{y \in Y} \P{X = x, Y = y}$
+
+ - **independent and indentically distributed (i.i.d.)** -- a sequence of distributions that are pairwise independent and have the same distribution
+
+ - $\P{X + Y = k} = \sum_{x \in X} \P{X = x} \P{Y = k - x}$ (convolution)
+ - $\P{\max\{X, Y\} \ge k} = \P{X \ge k}\P{Y \ge k}$
+ - $\P{\min\{X, Y\} > k} = \P{X > k}\P{Y > k}, \min\{X, Y\} + \max\{X, Y\} = X + Y$
+ - Order statistics: i.i.d. $X_i$, $i \in 1..n$, density of $k$th smallest value $(\binom{n-1}{k-1}\P{X_i \le x}^{k-1})(n\P{X_i = x})\P{X_i \ge x}^{n-k}$ 
+
+expectation -- weighted average
+ - average value, the most basic moment, a useful summary statistic
+   - minimizes weighted L2 norm (becomes variance)
+ - Law of the unconscious statistician: $\EV{f(X)} = \int_{x \in X} f(x)\P{X = x}$
+ - Linearity of expectation derives from linearity of summation, and holds even between dependent random variables
+ - Tail sum: $\EV{\abs{X}} = \sum_{k \in \Ints_+} \P{\abs{X} \ge k}$
+
+spread, average squared distance from the mean: $\Cov{X}{Y} = \EV{(X-\EV{X})(Y-\EV{Y})} = \EV{XY} - \EV{X}\EV{Y}, \Var{X} = \Cov{X}{X} = \sigma_X^2$
+ - deterministic $\P{X = k} = 1$ has 0 variance
+ - $\Var{X + Y} = \Var{X} - 2\Cov{X}{Y} + \Var{Y}$
+ - $\Var{X+k} = \Var{X}, \Var{cX} = c^2\Var{X}$
+ - $\Cov{X}{Y} = 0$ ($X,Y$ uncorrelated) if $X,Y$ independent
+
+linearity
+ - $\EV{aX_1 + bX_2} = a\mu_1 + b\mu_2$
+ - $\Var{aX_1 + bX_2} = a^2\sigma^2_1 + b^2\sigma^2_2$
+ - change of variables: $\op{pdf}_{aX+b}(x) = \frac{1}{\abs a} \op{pdf}_{X}(\frac{x-b}{a})$
+ - Standardization: $z_X = \frac{x-\mu_X}{\sigma_X}, \EV{z_X} = 0, \Var{z_X} = 1$
+
+### Discrete Distributions
+
+ - setting -- parameters (fixed), variables
+ - Bernoulli trials -- an experiment whose outcome can be classified as a success or a failure with a known probability $p$ of success
+   - classic examples that constitute a trial are getting a side in a coin flip, repeatedly choosing with replacement
+
+indicator, Bernoulli
+ - $\EV{X_i^k} = \P{X_i = 1}$
+ - $\P{\bigcup_{i \in 1..n} X_i} = \sum_{k \in 1..n} (-1)^{k-1} \sum_{I \subseteq 1..n, \abs{I}=k} \P{\bigcap_{i \in I} X_i} \text{(inclusion-exclusion)} \le \sum_{i \in 1..n} X_i \text{(union bound, equal for disjoint)}$
+ - \P{\bigcap_i X_i = 1} = p^n$
+ - $\P{\bigcup_i X_i = 1} = 1 - (1 - p)^n$
+ - \Var{\sum_i^n X_i} = n\EV{X_i^2} + P(n,2)\EV{X_iX_j | i \ne j} - \EV{X_i}^2$
+   - variance of sum is same as variance of sum of opposite,
+     letting $p_1 = \EV{X_i^n}, p_2 = \EV{X_iX_j | i \ne j}$
+ - $\EV{X} = np_1$
+ - $\EV{X^2} = \EV{X} + P(n, 2)p_2$
+ - $\Var{X_i} = p_1 - p_1^2$
+ - $\Cov{X_i}{X_j} = p_2 - p_1^2$
+ - $\Var{X} = P(n, 1)\Var{X_i} + P(n, 2)\Cov{X_i}{X_j}$
+ - $\Cov{X}{Y} = n_Xn_Y\Cov{X_i}{Y_j}$
+
+$X \sim \U(a..b)$
+ - $\EV{X} = \frac{a+b}{2}$
+ - $\Var{X} = \frac{(b - a + 1)^2 - 1}{12}$
+ - $\P{X \in S \subseteq (a..b)} = \frac{\abs{S}}{b - a + 1}$
+
+Binomial: $X = \sum_i^n X_i \sim \Binom(n, p)$
+ - sequences of repeated i.i.d. Bernouilli trials
+   - i.e., coin flips/tosses with face bias p, constant probability of success/hit
+ - $n$ -- observations
+ - $p$ -- $\P{\t{success}}$ for all trials
+ - $X$ -- successes
+ - $\P{X = k} = \overbrace{\binom{n}{k}}^{\t{equivalent arrangements}} \overbrace{p^k (1-p)^{n-k}}^{\t{sequence}}$
+ - symmetric for $p = \frac{1}{2}$
+ - support: $X \in 0..n$
+ - $\EV{X} = np$
+ - $\Var{X} = np(1-p)$
+
+Geometric: $X = \arg \min_{X_i = 1} i \sim \Geom(p)$
+ - how many more trials/observations/time left until the first successful result appears, which occurs with known/fixed probability
+   - used to model how many runs before the system fails, how many shots before one is on target, how many retransmissions of a packet before successfully reaching the destination, etc.
+ - $X \in \Ints_+$
+ - $\min\{G_1, G_2\} \sim \Geom(1 - (1-p_1)(1-p_2))$
+ - $\P{X = k} = (1-p)^{k-1}p$
+ - $\P{X \ge k} = (1-p)^{k-1}$
+ - $\EV{X} = 1/p$ ($\EV{X} = 1 + (1-p)\EV{X}$; geometric series with $A=p$, $r=1-p$)
+ - $\Var{X} = \frac{1-p}{p^2}$
+ - Let $X$ be the number of failures until the $r$th success, which occurs with probability $p$. Find $\EV{X}$. This can be thought of as $r$ successive geometric distributions. We expect that the number of trials until the first success is $\frac{1}{p}$, therefore we expect the number of trials until the $r$th success to be \frac{r}{p}. Thus, the number of failures until the $r$th success has expectation $\frac{r}{p} - r = \frac{r(1−p)}{p}$. This is called the \it{negative binomial} distribution with parameters $r, p$.
+
+$X = \Pois(\lambda)$
+ - describes the number of events occuring within a fixed continuous interval of time/space, where these events in disjoint subregions occur independently and with a known average rate/density $\lambda$
+   - limit of successes per unit for many trials
+ - $\lambda$ - average per unit time/space
+ - Let $X \sim \Binom(n, \frac{\lambda}{n})$ where $\lambda > 0$ is a fixed constant. Then $\P{X = k} \to \frac{e^{-\lambda}\lambda^k}{k!}$ as $n \to \infty$.
+ - $X \in \Ints$
+ - $P_1 + P_2 \sim \Pois(\lambda_1 + \lambda_2)$
+ - for $N \sim \Pois(\lambda), \Binom(N, p) = \Pois(\lambda p)$
+
+### Bounds \& Confidence Intervals
+
+Coupon Collector's problem: $\sum_{i \in 1..n} X_i$, with $X_i \sim \Geom(\frac{1}{n-i+1})$
+ - number of coupons needed to collect the complete set of all n coupons (at least 1 copy of every card)
+ - expected number we must draw from $N$ without replacement before we get all $n$ coupons (including the last spade) is $N - (N-n)\frac{1}{n+1}$, consider number that come after (not including last), only relative order of the n coupons and 1 non-coupon
+
+$m$ balls in $n$ bins ($n>m$): (birthday paradox)
+ - $\P{\text{no collisions}} = 1 - \frac{P(n,m)}{n^m} \approx \exp(-\frac{m^2}{2n}) = \frac{1}{2}$ for $m \approx \sqrt{2ln(2)n} \approx 1.2\sqrt{n}$
+ - $\P{\text{a coupon has not been seen in $n$ boxes}} = (\frac{m-1}{m})^n$
+ - $\EV{\text{coupons seen after $n$ steps}} = m(1 - (\frac{m-1}{m})^n)$
+ - $\P{\text{bin empty after $k$ steps}} = (\frac{n-1}{n})^k$
+ - $\EV{\text{empty bins}} = m(\frac{n-1}{n})^k \ge \P{\text{empty bins} \ge 1}$
+
+sample mean: $\hat{\mu} = \bar{x} = \frac{1}{n} \sum_{i \in 1..n}^n X_i$
+ - $\Var{\bar{x}} = \frac{\Var{X_i}}{n}$
+ - CLT: $\bar{x} \sim \Norm(\mu, \frac{\sigma}{\sqrt{n}})$ for large $n$
+
+ - Markov's inequality: $\P{\abs{X} \ge \alpha} \le \frac{\P{f(\abs{X})}}{f(\alpha)}, \P{\abs{X - \EV{X}} \ge \abs{\alpha - \EV{X}}}$ for monotonically increasing $f$
+ - Chebyshev's inequality: $\P{\abs{X - \EV{X}} \ge \epsilon} \le \frac{\Var{X}}{\epsilon^2} = 1 - \delta$ (confidence of margin of error $\epsilon$)
+   - halve to get 1-tail bound if symmetric
+   - $n \ge \frac{\Var{X_i}}{\epsilon^2 \delta}$
+ - Weak LLN: For any $\epsilon > 0$, we have $\P{\abs{\hat{\mu} − \mu} \ge \epsilon} \to 0$ as $n \to \infty$
+
+### Estimators
+
+Linear Regression
+ - $\hat{Y} = \op{LLSE}[Y | X] = \EV{Y} + \frac{\Cov{X}{Y}}{\Var{X}}(X - \EV{X})$
+ - $\Cov{X}{Y} = \Var{X}D_X\op{LLSE}[Y | X]$
+ - $\EV{Y | X} = \op{LLSE}[Y | X]$ if $D^2_X \EV{Y | X} = 0$
+
+Conditional expectation for joint distributions:
+ - MMSE interpretation: $\arg \min_g \EV{(Y - g(X))^2} = \EV{Y | X}$
+ - $\EV{Y | X = x} = \sum_y y \P{Y = y | X = x}$
+ - $\EV{a | Y} = a$
+ - law of total expectation, smoothing, iterated expectation: $\EV{E{Y | X}} = \EV{Y}$
+ - $\EV{Y | X} \ge 0$ if $Y \ge 0$
+ - $\EV{Y | X} = \EV{Y}$ if $X, Y$ independent
+ - factoring known values: $\EV{h(X) \cdot Y | X} = h(X) \cdot \EV{Y | X}$
+ - $\EV{X_i | \sum_{i \in 1..n} X_i} = \frac{1}{n} \sum_{i \in 1..n} X_i$
+
+Projection property: $\EV{(Y - \EV{Y | X})\phi(X)} = 0$
+
+Orthogonality principle:
+ - Let $\dots,b_i,\dots$ be a basis of estimators such that there is a $\hat{Y} = \dots + c_ib_i + \dots$ for unique $\dots,c_i,\dots$ which best estimates a given $Y$;
+ - then $\EV{(Y - \hat{Y})b_i} = 0$
+
+### Markov Chains
+
+<!--
+history
+discrete timestep
+evolution of a system
+destination
+return time
+-->
+
+ - used to reason about strings whose next state depends solely on the previous
+
+ - represented as a transition matrix
+ - $\P{X' = c | X = r} = P_{rc}$
+ - state vector: $\P{X = i} = \pi_i$
+ - $\P{X_n = i_n, \dots, X_0 = i_0} = \pi_0(i_0)P(i_0, i_1) \dots P(i_{n-1}, i_n)$
+
+ - when right multiplied by a state vector gives its successor: $\pi' = \pi P$
+
+ - both vectors and matrix are stochastic, meaning rows sum to 1
+
+ - Markov property: current state depends on previous state only, allows simplification of chain rule
+
+ - irreducible: fully connected, all states are reachable from every other
+   - irreducible $\implies$ every state has same $d(i)$
+ - periodicity: $d(i) = 1$ (lengths of cycles starting and ending at state $i$ are not multiples of an integer other than 1) for every state $i$
+ - finite, irreducible $\implies$ unique invariant distibution, long-term fraction of time spend in state $\lim_{n \to \infty} \frac{1}{n} \sum_{k \in 0..n-1} 1_{X_k = i} = \pi(i)$
+ - finite, irreduicble, aperiodic $\implies$ $\lim_{n \to \infty} \P{X_n = i} = \pi(i)$ starting from any initial $\pi_0$ (does not converge if periodic)
+
+balance equations for invariant/stationary distribution: $\pi = \pi P$, find right eigenvectors with eigenvalue 1
+
+first step equations
+ - first passage time: $T_A = \arg\min_t X_t \in A$
+ - $\beta(i) = \EV{T_A | X_0 = i}$
+   - hitting time equations: expected number of timesteps until first entering a certain state
+   - $\beta(0) = 1 + \sum_i \pi_0(i)$
+   - $\beta(i) = 1 + \sum_j P(i, j) \beta(j)$
+   - $\beta(A) = 0$
+ - $\alpha(i) = \P{T_A < T_B | X_0 = i}$
+   - $\alpha(i) = \sum_j P(i, j) \alpha(j)$
+   - $\alpha(A) = 1$
+   - $\alpha(B) = 0$
+
+### Continuous Distributions
+
+take the limit of increasingly shorter units of time to get the continuous analog
+
+$X \sim \U([a, b])$
+ - $\op{pdf}_X(x) = \frac{1_{a \le x \le b}}{b-a}$
+ - $\EV{X^n} = \frac{b^{n+1}-a^{n+1}}{(n+1)(b-a)}$
+ - $\Var{X} = \frac{(b-a)^2}{12}$
+ - $\frac{X - a}{b - a} \sim \U(0..1)$
+ - $\EV{X_{(k)}} = a + \frac{k(b-a)}{n+1}$
+   - lay in a line, $n$ i.i.d. split the interval $n+1$-wise
+   - by symmetry, each has a length of $\frac{b-a}{n+1}$
+   - if on the circumference of a clock, divide by $n$ instead of $n+1$
+
+memoryless property: $\P{X > t + s | X > t} = \P{X > s}$
+ - survival function: lasts longer than $t$
+ - uniquely defines geometric, exponential
+ - if we know that no arrival has happened in the first $t$ time units (hence $X>t$),
+   then we can effectively "restart" the process at time $t$,
+   and the time from $t$ until the first arrival is distributed the same
+ - $\EV{X | X > t} = t + \EV{X}$
+   - the distribution of the waiting time after $t$ has elapsed until the first arrival, given that no arrivals happened in the first $t$ units, is the same independently of the past
+
+$X \sim \Exp(\lambda)$
+ - waiting time until the first arrival/success of some continuous time process, given events happen at an average rate $\lambda$ per unit time
+ - $\op{pdf}_X(x) = \lambda e^{-\lambda x} 1_{x \ge 0}$
+ - $\P{X \le x} = (1 - e^{-\lambda x})1_{x \ge 0}$
+ - $\EV{X} = \lambda^{-1}$
+ - $\Var{X} = \lambda^{-2}$
+ - $aX \sim \Exp(\frac{\lambda}{a})$
+ - $\EV{\max\{X_1, \dots, X_n\}} = \frac{H(n)}{\lambda}$
+   - we run all of them until each one has an arrival
+   - the max is equal to the min plus the time it took from the first arrival to the last one
+ - $\min\{X_1, X_2\} \sim \Exp(\lambda_1 + \lambda_2)$
+ - Inspector's paradox: for unknown $t$, the expectation of the lifetime of an exponential process is $\frac{2}{\lambda}$ by symmetry
+
+Gaussian: $X \sim \Norm(\mu, \sigma)$
+ - according to the De Moivre-Laplace theorem, the binomial distribution converges to the normal distribution, taking the limit as $n$ grows large
+   - as $n$ increases, the z-scores of successive values of $X$ get closer together, eventually approaching a continuum
+ - $\op{pdf}_X(x) = \frac{1}{\sigma\sqrt{2\pi}} e^{-\frac{1}{2}\frac{x-\mu}{\sigma}^2}$
+ - $\frac{1}{\sqrt{2\pi}} \approx .4$
+ - 68–95–99.7 rule
+
+</textarea>

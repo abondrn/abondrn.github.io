@@ -199,58 +199,51 @@ table {
   </div>
 
   <div id="Home" class="tabcontent" style="display: block;">
-    <name>Alex Bondarenko</name>
-    <h>Hello! I'm a student at UC Berkeley majoring in Computer Science (CS). I focus on the backend side of software engineering, and have recently been working with data and machine learning.
-</h>
+    <name>{{resume['basics']['name']}}</name>
+    <h>{{resume['basics']['summary']}}</h>
   </div>
 
   <div id="Education" class="tabcontent">
     <h>Education</h>
-    <ti>B.A. in Computer Science at UC Berkeley, Fall 2016 - Fall 2020</ti>
+    <ti>{{degree['studyType']}} in {{degree['area']}} at {{degree['institution']}}, {{degree['startDate']}} - {{degree['endDate']}}</ti>
     <te><a href="classes.html">Coursework</a></te>
     <ti>Organizations</ti>
-    <te><a href="asucocto.org" target="_blank">ASUC Office of the CTO</a>, <a href="upe.cs.berkeley.edu" target="_blank">Upsilon Pi Epsilon (CS Honor Society)</a></a>
+    <te>{{degree['clubs'] | map('markup') | join(', ')}}</a>
    	</te>
   </div>
 
   <div id="Experience" class="tabcontent">
     <h>Experience</h>
-    <ti>Software Engineering Intern at Google, May - August 2018</ti>
-    <te>Worked on the Device Inventory team on a project related to data engineering and information retrieval for a schemaless database of corporate device assets.</te>
-    <ti>Software Engineering Intern at Intuit, May - August 2017</ti>
-    <te>Fullstack work that powered performance analytics for core infrastructure.</te>
+%% for job in resume['work']
+    <ti>{{job['position']}} at {{job['company']}}, {{job['startDate']}} - {{job['endDate']}}</ti>
+    <te>{{job['summary']}}.</te>
+%% endfor
   </div>
 
   <div id="Portfolio" class="tabcontent">
     <h>Portfolio</h>
-    <ti><a href="http://berkeleytime.com" target="_blank">BerkeleyTime</a></ti>
-    <te>Revamping search for the most popular augmented course catalog at UC Berkeley (30,000+ unique users) using Elasticsearch.</te>
-    <ti>Academix</ti>
-    <te>Created a functional demo using Free Busy and Google Maps APIs to automate planning meetings.</te>
-    <ti><a href="http://github.com/aakashadesara/MirrorMirrorOnTheWall" target="_blank">Mirror Mirror on the Wall</a></ti>
-    <te>Designed a “Smart Mirror” that responds to voice commands to play music, give weather forecasts, etc. powered by a Raspberry Pi and a dynamic web interface, winning Honorable Mention and Crowd Favorite awards.</te>
-    <ti><a href="https://github.com/leoadberg/Intuit-Hackathon-Project" target="_blank">JumboJobs</a></ti>
-    <te>A website that allows the user to search for specific industries in different locations to see job growth, average income, and more.</te>
-    <ti><a href="http://www-inst.eecs.berkeley.edu/~cs61a/su16/" target="_blank">Ray Tracer</a></ti>
-    <te>Rendered a 3D scene complete with patterns and shadows, earned second place in a programmatic art contest.</te>
+%% for project in resume['projects']
+    <ti>{{project | linked('name')}}</ti>
+    <te>{{project['summary']}}.</te>
+%% endfor
   </div>
 
   <div id="Contact" class="tabcontent">
     <h>Contact</h>
-    <ti>Send me an email at <a href="mailto:abondarenko@berkeley.edu" target="_top">abondarenko@berkeley.edu</a>.</ti>
+    <ti>Send me an email at {{ resume['basics']['email'] | link(email=True) }}.</ti>
   </div>
 
 <table>
   <tr>
     <td>
-      <a href="http://github.com/abondrn" target="_blank"><i class="fab fa-github fa-2x"></i></a>
+      {{ (resume['basics']['profiles'] | selectattr('network', '==', 'GitHub') | first)['url'] | link('<i class="fab fa-github fa-2x"></i>') }}
     </td>
     <td>
-      <a href="http://abondrn.github.io" target="_blank"><svg class="icon" height="32" viewBox="0 0 30 32" width="40"><path d="M27 0h-24c-1.65 0-3 1.35-3 3v26c0 1.65 1.35 3 3 3h24c1.65 0 3-1.35 3-3v-26c0-1.65-1.35-3-3-3zM26 28h-22v-24h22v24zM8 18h14v2h-14zM8 22h14v2h-14zM10 9c0-1.657 1.343-3 3-3s3 1.343 3 3c0 1.657-1.343 3-3 3s-3-1.343-3-3zM15 12h-4c-1.65 0-3 0.9-3 2v2h10v-2c0-1.1-1.35-2-3-2z"></path></svg></a>
+      {{ resume['basics']['website'] | link('<svg class="icon" height="32" viewBox="0 0 30 32" width="40"><path d="M27 0h-24c-1.65 0-3 1.35-3 3v26c0 1.65 1.35 3 3 3h24c1.65 0 3-1.35 3-3v-26c0-1.65-1.35-3-3-3zM26 28h-22v-24h22v24zM8 18h14v2h-14zM8 22h14v2h-14zM10 9c0-1.657 1.343-3 3-3s3 1.343 3 3c0 1.657-1.343 3-3 3s-3-1.343-3-3zM15 12h-4c-1.65 0-3 0.9-3 2v2h10v-2c0-1.1-1.35-2-3-2z"></path></svg>') }}
       </a>
     </td>
     <td>
-      <a href="http://linkedin.com/in/abondrn" target="_blank"><i class="fab fa-linkedin fa-2x"></i></a>
+      {{ (resume['basics']['profiles'] | selectattr('network', '==', 'LinkedIn') | first)['url'] | link('<i class="fab fa-linkedin fa-2x"></i>') }}
     </td>
     <td>
       <a onclick="openTab(event, 'Contact')">
@@ -260,6 +253,6 @@ table {
   </tr>
 </table>
 
-<div class="copy">&copy; 2018 Alex Bondarenko</div>
+<div class="copy">&copy; 2018 {{resume['basics']['name']}}</div>
 </body>
 </html>

@@ -32,8 +32,8 @@ jobs:
     defaults:
       run:
         working-directory: ./jekyll-digital-garden
-      env:
-        DIR: ./jekyll-digital-garden
+    env:
+      DIR: ./jekyll-digital-garden
     steps:
       - name: Checkout
         uses: actions/checkout@v3

@@ -2,33 +2,7 @@
 <html lang="en">
 <head>
 
-<script async src="https://www.googletagmanager.com/gtag/js?id=UA-128390657-1"></script>
-<script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
 <script>
-window.dataLayer = window.dataLayer || [];
-function gtag(){dataLayer.push(arguments);}
-gtag('js', new Date());
-
-gtag('config', 'UA-128390657-1', {
-  'page_path': location.pathname,
-  'link_attribution': true,
-});
-
-gtag('event', 'page_view', { 'send_to': 'UA-128390657-1'});
-
-(adsbygoogle = window.adsbygoogle || []).push({
-google_ad_client: "ca-pub-6187072965455073",
-enable_page_level_ads: true
-});
-
-window.addEventListener('load', function()
-{
-  if(window.ga && ga.create) console.log('Google Analytics is loaded');
-  else console.log('Google Analytics is not loaded');    
-
-  if(window.google_tag_manager) console.log('Google Tag Manager is loaded');
-  else console.log('Google Tag Manager is not loaded');
-}, false);
 
 function openTab(evt, tabName) {
     var i, tabcontent, tablinks;
@@ -56,7 +30,7 @@ function openTab(evt, tabName) {
   <meta name="author" content="Alex Bondarenko">
 
   <!-- Favicon -->
-  <link rel="shortcut icon" href="ab.png" >
+  <link rel="shortcut icon" href="ablogo.png" >
   <!-- https://fontawesome.com/how-to-use/on-the-web/setup/getting-started?using=web-fonts-with-css -->
   <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.4.2/css/all.css">
 
@@ -167,7 +141,7 @@ te:before {
   white-space: pre;
 }
 
-div.copy {
+#copyright {
   margin-top: 20px;
   font-size: 12px;
   text-align: center;
@@ -188,43 +162,42 @@ table {
 </head>
 
 <body>
-
-  <img src="https://ga-beacon.appspot.com/UA-128390657-2/gh-pages/?pixel" />
-
   <div class="tab">
     <button class="tablinks active" onclick="openTab(event, 'Home')">Home</button>
-    <button class="tablinks" onclick="openTab(event, 'Education')">Education</button>
     <button class="tablinks" onclick="openTab(event, 'Experience')">Experience</button>
     <button class="tablinks" onclick="openTab(event, 'Portfolio')">Portfolio</button>
     <button class="tablinks" onclick="openTab(event, 'Contact')">Contact</button>
   </div>
 
   <div id="Home" class="tabcontent" style="display: block;">
-    <name>Alex Bondarenko</name>
-    <h>Hello! I studied Computer Science (CS) at UC Berkeley. I am interested in the intersection of big data, high performance computing, and science.
+    <name>Hi, I'm Alex</name>
+    <h>
+      I studied Computer Science at UC Berkeley.
+      I build at the intersection of collaborative intelligence, cyber-physical automation, and high performance distributed computing to accelerate scientific research.
+      I value learning in public, open source, and reproducible research.
+      See what I've done, and if you like what you see reach out.
 </h>
-  </div>
-
-  <div id="Education" class="tabcontent">
-    <h>Education</h>
-    <ti>B.A. in Computer Science at UC Berkeley, Fall 2016 - Fall 2020</ti>
-    <te><a href="classes.html">Coursework</a></te>
-    <ti>Organizations</ti>
-    <te><a href="http://upe.cs.berkeley.edu" target="_blank">Upsilon Pi Epsilon (CS Honor Society)</a></a>
-   	</te>
   </div>
 
   <div id="Experience" class="tabcontent">
     <h>Experience</h>
+    <ti>Bioinformatics Software Engineer at Tempus, May 2021 - Present</ti>
+    <te>Writing modular pipeline components used in oncogenomic assays, and automating variant characterization systems on GCP.</te>
     <ti>Software Engineering Intern at Google, May - August 2018</ti>
     <te>Worked on the Device Inventory team on a project related to data engineering and information retrieval for a schemaless database of corporate device assets.</te>
     <ti>Software Engineering Intern at Intuit, May - August 2017</ti>
     <te>Fullstack work that powered performance analytics for core infrastructure.</te>
+
+    <h>Education</h>
+    <ti>B.A. in Computer Science at UC Berkeley, 2016 - 2020</ti>
+    <te>Organizations - <a href="http://upe.cs.berkeley.edu" target="_blank">Upsilon Pi Epsilon (CS Honor Society)</a>, iGEM, CHAOS, Ukrainian Club, West Coast Swing, Running Club</a>
+   	</te>
   </div>
 
   <div id="Portfolio" class="tabcontent">
     <h>Portfolio</h>
 
+    <!-- TODO update portfolio and upload screenshots -->
     <ti>Academix</ti>
     <te>Created a functional demo using Free Busy and Google Maps APIs to automate planning meetings.</te>
     <ti><a href="http://github.com/aakashadesara/MirrorMirrorOnTheWall" target="_blank">Mirror Mirror on the Wall</a></ti>
@@ -237,7 +210,9 @@ table {
 
   <div id="Contact" class="tabcontent">
     <h>Contact</h>
-    <ti>Send me an email at <a href="mailto:abondarenko@berkeley.edu" target="_top">abondarenko@berkeley.edu</a>.</ti>
+
+    <ti>The best way to reach me is to shoot me an email at <a href="mailto:{{site.user.email}}" target="_top">{{site.user.email}}</a>.</ti>
+    <te>If you are interested in working, networking, or collaborating with me, do not hesitate to reach out. </te>
   </div>
 
 <table>
@@ -245,6 +220,7 @@ table {
     <td>
       <a href="http://github.com/abondrn" target="_blank"><i class="fab fa-github fa-2x"></i></a>
     </td>
+    <!-- TODO update resume -->
     <td>
       <a href="http://goo.gl/cYSccq" target="_blank"><svg class="icon" height="32" viewBox="0 0 30 32" width="40"><path d="M27 0h-24c-1.65 0-3 1.35-3 3v26c0 1.65 1.35 3 3 3h24c1.65 0 3-1.35 3-3v-26c0-1.65-1.35-3-3-3zM26 28h-22v-24h22v24zM8 18h14v2h-14zM8 22h14v2h-14zM10 9c0-1.657 1.343-3 3-3s3 1.343 3 3c0 1.657-1.343 3-3 3s-3-1.343-3-3zM15 12h-4c-1.65 0-3 0.9-3 2v2h10v-2c0-1.1-1.35-2-3-2z"></path></svg></a>
       </a>
@@ -260,6 +236,6 @@ table {
   </tr>
 </table>
 
-<div class="copy">&copy; 2018 Alex Bondarenko</div>
+{%- include Footer.html -%}
 </body>
 </html>

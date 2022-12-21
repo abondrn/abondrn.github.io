@@ -20,6 +20,7 @@
 
 
 baseurl: "/" # the subpath of your site, e.g. /blog
+feed_path: "/notes/"
 url: "https://abondrn.github.io" # the base hostname & protocol for your site, e.g. http://example.com
 favicon: /ablogo.png
 
@@ -127,6 +128,11 @@ plugins:
   - jekyll-feed 
   - jekyll-sitemap 
   - jekyll-tidy
+#  - jekyll-glossary_tooltip
+#  - jekyll-oembed
+  - jekyll-github-chart
+
+show_drafts: true
 
 # Disqus Comments
 disqus:

@@ -31,7 +31,7 @@
 *
 {%- endcomment -%}
 
-{%- if page.permalink == "/notes/" -%}
+{%- if page.permalink == site.feed_path -%}
     {%- for item in site.posts -%}
         <div class="feed-title-excerpt-block disable-select" data-url="{{site.url}}{{item.url}}">
             <a href="{{item.url}}" style="text-decoration: none; color: #555555;">

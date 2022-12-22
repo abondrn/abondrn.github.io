@@ -44,6 +44,8 @@ jobs:
           bundler-cache: false # runs 'bundle install' and caches installed gems automatically
           cache-version: 1 # Increment this number if you need to re-download cached gems
           working-directory: ${{env.DIR}}
+      - name: Install Dependencies
+        run: sudo apt-get install libcurl4-openssl-dev
       - name: Bundle Install
         run: bundle install
       - name: Setup Pages

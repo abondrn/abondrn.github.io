@@ -45,7 +45,7 @@ jobs:
           cache-version: 1 # Increment this number if you need to re-download cached gems
           working-directory: ${{env.DIR}}
       - name: Bundle Install
-        run: bundle clean && bundle install
+        run: bundle clean --force && bundle install
       - name: Setup Pages
         id: pages
         uses: actions/configure-pages@v2

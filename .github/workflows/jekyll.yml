@@ -45,7 +45,7 @@ jobs:
           cache-version: 1 # Increment this number if you need to re-download cached gems
           working-directory: ${{env.DIR}}
       - name: Install Dependencies
-        run: sudo apt-get install libcurl4-openssl-dev libxslt-dev libxml2-dev zlib1g-dev
+        run: sudo apt-get install libcurl4-openssl-dev libxslt-dev libxml2-dev zlib1g-dev patch liblzma-dev pkg-config
       - name: Bundle Install
         run: bundle install
       - name: Setup Pages

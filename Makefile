@@ -1,7 +1,7 @@
 JEKYLL=jekyll-digital-garden
 
 serve: build
-	cd $(JEKYLL) && bundle exec jekyll serve --drafts
+	cd $(JEKYLL) && bundle exec jekyll serve
 
 bundle:
 	cd $(JEKYLL) && sudo gem install bundle

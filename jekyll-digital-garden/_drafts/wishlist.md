@@ -19,7 +19,7 @@ In addition to describing the motivation and some MVP features, I elaborate what
 
 ### People-Oriented Feeds, Social Intelligence Platform
 
-In the past few years there has been a growing desire for "personal CRM" solutions: software that would help you better manage your relationships. In practice, using one of the currently available apps feels like data entry, and quite unlike what the process of maintaining a friendship should "feel" like. At the same time, the decline of monolithic platforms like Facebook and Twitter means that people are spread more across multiple platforms. Out of a desire of "meeting people where they are," I would like to better keep track of where everyone is.
+In the past few years there has been a growing desire for "personal CRM" solutions: software that would help you build deeper relationships. In practice, using one of the currently available apps feels like data entry, and quite unlike what the process of maintaining a friendship should "feel" like. At the same time, the decline of monolithic platforms like Facebook and Twitter means that people are spread more across multiple platforms. Out of a desire of "meeting people where they are," I would like to better keep track of where everyone is.
 
 My solution would be a local-first app. You would connect the few APIs that allow social graph access, and the rest you would feed it data dumps you request from various platforms. With this, you have access to all of your connections (and ideally messages) between you too.
 
@@ -27,6 +27,17 @@ This is where it gets fun. This could be an interesting layer to build applicati
 
 This could also be used for people you are not mutual connections with, ie celebrities and role models, potential business connections. Imagine being able to view someone's publications/IMDb, news alerts/interviews, biography, and collaborations publically to find more stuff you might like.
 
+Featurelist
+ - business card: share one of your profiles with a single QR code
+ - public/private profile curation: share a subset of your services
+ - gifts
+ - populate a social map from your friends' Instagrams, Yelp reviews
+ - scrape mutual follows/likes
+ - share referral codes
+ - find out whether your contacts are on various services using OSINT tools
+ - track hangouts with geotagging, message history
+ - share your current location, upcoming travels to coordinate meetups
+ - assemble feeds from various platforms (YouTube, Twitter)
 
 ### Matching
 

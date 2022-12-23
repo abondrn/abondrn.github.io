@@ -1,5 +1,6 @@
 ---
 title: Ongoing Projects
+tags: [Ideas]
 ---
 
 # Started
